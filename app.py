@@ -1,23 +1,14 @@
 def score_deal(amount: float, risk: int, customer_type: str) -> float:
     base = amount / 1000.0
 
-<<<<<<< HEAD
-    if customer_type == "enterprise":
-        multiplier = 1.3
-    elif customer_type == "smb":
-        multiplier = 1.0
-    else:
-        multiplier = 0.9
-=======
     multipliers = {
         "enterprise": 1.25,
         "smb": 1.0,
         "consumer": 0.9,
     }
->>>>>>> 903de4a (refactor: use multiplier map for customer types)
 
     multiplier = multipliers.get(customer_type, 0.9)
-    
+
     if risk >= 80:
         penalty = 3.0
     elif risk >= 50:
@@ -32,11 +23,15 @@ def score_deal(amount: float, risk: int, customer_type: str) -> float:
 
 
 def decision(score: float) -> str:
-    if score >= 8:
-        return "APPROVE"
-    if score >= 4:
-        return "REVIEW"
+    thresholds = [
+        (8, "APPROVE"),
+        (4, "REVIEW"),
+    ]
+    for threshold, label in thresholds:
+        if score >= threshold:
+            return label
     return "REJECT"
+
 
 
 def main() -> None:
